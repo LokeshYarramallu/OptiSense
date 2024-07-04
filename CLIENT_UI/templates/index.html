@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AC STATUS</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f0f2f5;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+      }
+      h1 {
+        font-weight: bold;
+        color: #333;
+      }
+      table {
+        margin-top: 20px;
+      }
+      .highlight {
+        animation: highlight-animation 1s ease-in-out;
+      }
+      @keyframes highlight-animation {
+        0% {
+          background-color: #d1ecf1;
+        }
+        100% {
+          background-color: white;
+        }
+      }
+      .table th,
+      .table td {
+        vertical-align: middle;
+        text-align: center;
+      }
+      .table th {
+        background-color: #343a40;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mb-4">AC STATUS</h1>
+      <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>Time</th>
+            <th>People Count</th>
+            <th>Temperature</th>
+            <th>Fan Speed</th>
+          </tr>
+        </thead>
+        <tbody id="data-table">
+          {% for item in data %}
+          <tr>
+            <td>{{ data[item]['time'] }}</td>
+            <td>{{ data[item]['people_count'] }}</td>
+            <td>{{ data[item]['temp_value'] }}</td>
+            <td>{{ data[item]['fan_speed'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        function fetchData() {
+          $.ajax({
+            url: "/api/data",
+            method: "GET",
+            success: function (response) {
+              let tableBody = $("#data-table");
+              tableBody.empty();
+              for (let item in response) {
+                let row = `
+                  <tr class="highlight">
+                    <td>${response[item]["time"]}</td>
+                    <td>${response[item]["people_count"]}</td>
+                    <td>${response[item]["temp_value"]}</td>
+                    <td>${response[item]["fan_speed"]}</td>
+                  </tr>
+                `;
+                tableBody.append(row);
+              }
+            },
+            error: function (error) {
+              console.log("Error fetching data:", error);
+            },
+          });
+        }
+
+        // Fetch data initially and then every 5 seconds
+        fetchData();
+        setInterval(fetchData, 5000);
+      });
+    </script>
+  </body>
+</html>
