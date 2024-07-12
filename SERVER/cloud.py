@@ -4,7 +4,7 @@ from firebase_admin import db
 from datetime import datetime
 
 class FBDB:
-    def __init__(self, path_to_service_key='optiawake-firebase-adminsdk-7afg6-097b204a01.json', databaseURL='https://optiawake-default-rtdb.firebaseio.com/'):
+    def __init__(self, path_to_service_key='optiawake-firebase-adminsdk-7afg6-30564cd4c7.json', databaseURL='https://optiawake-default-rtdb.firebaseio.com/'):
         if not firebase_admin._apps:
             cred = credentials.Certificate(path_to_service_key)
             firebase_admin.initialize_app(cred, {

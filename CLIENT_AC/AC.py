@@ -5,13 +5,11 @@ import time
 class AC:
     def __init__(self, temperature=24, fanspeed=1, root= None):
         self.temperature = temperature
-        self.fanspeed = fanspeed
-        self.fanspeed = fanspeed
         self.observers = [] 
 
         self.root = root
         self.temperature = 24
-        self.fanspeed = 1
+        self.fan_speed = 1
 
     def increase_temperature(self, diff =1):
         self.temperature = min(27, self.temperature+diff)
@@ -21,17 +19,17 @@ class AC:
         self.temperature = max(16, self.temperature-diff)
         self.adjust_fan_speed()
 
-    def increase_fanspeed(self):
-        self.fanspeed = min(4,self.fanspeed+1)
+    # def increase_fanspeed(self):
+    #     self.fanspeed = min(4,self.fanspeed+1)
 
-    def decrease_fanspeed(self,):
-        self.fanspeed = max(1,self.fanspeed-1)
+    # def decrease_fanspeed(self,):
+    #     self.fanspeed = max(1,self.fanspeed-1)
 
     def get_temperature(self):
         return self.temperature
 
     def get_fanspeed(self):
-        return self.fanspeed
+        return self.fan_speed
     
     def get_status(self):
         status = f"status {self.get_temperature()} {self.get_fanspeed()} "

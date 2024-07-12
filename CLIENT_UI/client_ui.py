@@ -1,3 +1,4 @@
+from datetime import datetime
 import socket
 from flask import Flask, render_template, jsonify
 import json
@@ -15,6 +16,26 @@ def index():
 def get_data():
     return jsonify(received_data)
 
+@app.route('/api/refresh', methods=['POST'])
+def refresh_data():
+    global received_data
+    client.receive_data()
+    return '', 204  
+
+
+@app.route('/api/today', methods=['GET'])
+def today_data():
+    global received_data
+    today = datetime.now().strftime("%d/%m/%Y")
+    today_data = []
+    for data in received_data:
+        if today in received_data[data]['time']:
+            today_data.append(data)
+
+    received_data = {data: received_data[data] for data in today_data}
+    return '', 204  
+
+
 class UI_client:
     def __init__(self, server_ip='192.168.137.69', port=65432):
         self.server_ip = server_ip
@@ -27,7 +48,7 @@ class UI_client:
         print(f"Connected to server at {self.server_ip}:{self.port}")
 
     def receive_data(self):
-        global received_data
+        global received_data  
         self.client_socket.send("UIdata".encode())
 
         message_length = self.client_socket.recv(4)

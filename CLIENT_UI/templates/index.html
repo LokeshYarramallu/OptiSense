@@ -53,6 +53,10 @@
   <body>
     <div class="container">
       <h1 class="mb-4">AC STATUS</h1>
+
+      <button id="refresh-button">Refresh Data</button>
+      <button id="today-data-button">Today's Data</button>
+
       <table class="table table-striped table-bordered">
         <thead class="thead-dark">
           <tr>
@@ -105,9 +109,36 @@
           });
         }
 
-        // Fetch data initially and then every 5 seconds
         fetchData();
         setInterval(fetchData, 5000);
+      });
+
+      $(document).ready(function () {
+        $("#refresh-button").click(function () {
+          $.ajax({
+            url: "/api/refresh",
+            method: "POST",
+            success: function () {
+              console.log("Data refreshed successfully");
+            },
+            error: function (error) {
+              console.error("Error:", error);
+            },
+          });
+        });
+
+        $("#today-data-button").click(function () {
+          $.ajax({
+            url: "/api/today",
+            method: "GET",
+            success: function () {
+              console.log("Today's data filtered successfully");
+            },
+            error: function (error) {
+              console.error("Error:", error);
+            },
+          });
+        });
       });
     </script>
   </body>
